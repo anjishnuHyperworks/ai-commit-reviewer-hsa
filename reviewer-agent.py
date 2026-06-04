@@ -32,7 +32,7 @@ class GitLogs:
         self.directory_path = directory_path
 
         git_log_command = subprocess.run(
-            ['git', 'log'],
+            ['git', 'log', '-20'],
             cwd=self.directory_path, capture_output=True, text=True, shell=True
         )
         git_log_lines = [c for c in git_log_command.stdout.splitlines() if c.split()]
