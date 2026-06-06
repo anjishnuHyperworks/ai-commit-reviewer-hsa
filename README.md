@@ -59,4 +59,4 @@ Logs are saved to `logs/` as:
 
 ---
 
-> **Note:** This project is currently in active development.
+> **Note:** This project is currently in development.
