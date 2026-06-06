@@ -5,7 +5,7 @@ Automated post-commit agent that analyzes recent git activity and generates LLM-
 ## What It Does
 
 - Hooks into the git post-commit lifecycle of tracked repos
-- Fetches the last 20 commits and the diff for the most recent one
+- Fetches the last 20 commits and diffs the most recent one (or a specified commit range)
 - Sends the data to an LLM (via Groq) for analysis and recommendations
 - Saves the review as a timestamped Markdown file in `logs/`
 
@@ -43,11 +43,14 @@ chmod +x .git/hooks/post-commit
 Runs automatically on commit. To trigger manually:
 
 ```bash
-# Review a specific repo
+# Review a specific repo (diffs the two most recent commits)
 python reviewer-agent.py <repo-name>
 
 # Review all configured repos
 python reviewer-agent.py
+
+# Review a specific commit range (older hash first)
+python reviewer-agent.py <repo-name> --commits <older-hash> <newer-hash>
 ```
 
 ## Output
