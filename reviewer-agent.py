@@ -4,6 +4,7 @@ import os
 import subprocess
 import re
 import datetime
+import argparse
 import pytz
 
 from dotenv import load_dotenv
@@ -122,6 +123,15 @@ def save_log(repo_name: str, content: str, timestamp: str) -> str:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="AI Commit Reviewer")
+    parser.add_argument(
+        "repo",
+        nargs="?",
+        choices=list(REPOS.keys()),
+        help="Repo to review (omit to review both)",
+    )
+    args = parser.parse_args()
+
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise EnvironmentError("GROQ_API_KEY not found. Add it to the .env file in h2-system-analysis/.")
@@ -129,7 +139,9 @@ if __name__ == "__main__":
     ist = pytz.timezone("Asia/Kolkata")
     timestamp = datetime.datetime.now(ist).strftime("%Y-%m-%d_%H-%M-%S")
 
-    for repo_name, repo_path in REPOS.items():
+    repos_to_run = {args.repo: REPOS[args.repo]} if args.repo else REPOS
+
+    for repo_name, repo_path in repos_to_run.items():
         if not os.path.isdir(repo_path):
             print(f"[{repo_name}] Directory not found, skipping: {repo_path}")
             continue
